@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PRÓXIMO CONFRONTO - AZ.PROG</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
+    }
+
+    /* Fundo com imagem */
+    .background-image {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url("{{ url_for('static', filename='images/quadrilha.jpg') }}");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: -1;
+      filter: brightness(0.6);
+    }
+
+    /* Conteúdo da página */
+    .content {
+      position: relative;
+      z-index: 1;
+      padding: 40px 20px 100px 20px; /* espaço extra inferior pro footer */
+      min-height: 100vh;
+    }
+
+    .logo {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: #fff;
+      letter-spacing: 3px;
+      font-family: 'Courier New', Courier, monospace;
+      user-select: none;
+      z-index: 1000;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
+      margin: 0;
+    }
+
+    .game-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .game {
+      background-color: rgba(0, 0, 0, 0.6);
+      border: 1px solid #fff;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s, border-color 0.3s;
+      cursor: pointer;
+      flex-wrap: wrap;
+    }
+
+    .game:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-color: #fff;
+    }
+
+    .teams-container {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      flex: 1;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .team {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      min-width: 130px;
+      color: #fff;
+      text-shadow: 0 0 3px rgba(0, 0, 0, 0.8);
+      white-space: nowrap;
+    }
+
+    .team-photo {
+      width: 200px;
+      height: 70px;
+      background-color: #222;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+ .team-phoder {
+      width: 400px;
+      height: 140px;
+      background-color: #222;
+      border: 1px solid #fff;
+      border-radius: 4px;
+      flex-shrink: 0;
+      object-fit: cover;
+    }
+    .score {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #fff;
+      width: 70px;
+      text-align: center;
+      user-select: none;
+      white-space: nowrap;
+    }
+
+    .time-date {
+      font-size: 0.9rem;
+      color: #bbb;
+      width: 110px;
+      text-align: right;
+      font-style: italic;
+      user-select: none;
+      white-space: nowrap;
+      line-height: 1.3;
+    }
+
+    /* Footer fixo */
+    .sponsor-footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      text-align: center;
+      padding: 10px 0;
+      z-index: 10;
+      border-top: 1px solid #444;
+    }
+
+    .sponsor-footer img {
+      max-height: 1000px;
+      height: 100px;
+      width: 100px;
+    }
+
+    @media (max-width: 600px) {
+      .content {
+        padding: 20px 10px 100px 10px;
+      }
+
+      header h1 {
+        font-size: 2rem;
+      }
+
+      .game {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+      }
+
+      .teams-container {
+        justify-content: flex-start;
+        gap: 15px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .team {
+        min-width: auto;
+        font-size: 1rem;
+      }
+
+      .score {
+        width: auto;
+        font-size: 1.2rem;
+        margin-right: 10px;
+      }
+
+      .time-date {
+        width: auto;
+        text-align: left;
+        font-size: 0.85rem;
+      }
+
+      .sponsor-footer img {
+        max-height: 40px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Imagem de fundo -->
+  <div class="background-image"></div>
+
+  <!-- Conteúdo da página -->
+  <div class="content">
+
+    <div class="logo">AZ.PROG</div>
+
+    <header>
+      <h1>Jogos do morrô</h1>
+    </header>
+     <div class="game-list">
+      <div class="game">
+        <div class="teams-container">
+          <div class="team">
+            <img src="{{ url_for('static', filename='images/Sem juízo.png') }}" alt="JDCF" class="team-photo" />
+            SEM JUÍZO E.C.
+          </div>
+          <div class="score">3 - 1</div>
+          <div class="team">
+            <img src="{{ url_for('static', filename= 'images/BOLLA DE MEIA.png') }}" alt="Desce Mais Uma" class="team-photo" />
+            BOLLA DE MEIA E.C.
+          </div>
+        </div>
+        <div class="time-date">
+          SUB-17<br />
+          20/07<br />
+          09:30<br />
+          C.M. ALDONIO<br />
+        </div>
+      </div>
+
+    <div class="game-list">
+      <div class="game">
+        <div class="teams-container">
+          <div class="team">
+            <img src="{{ url_for('static', filename='images/Sem juízo.png') }}" alt="JDCF" class="team-photo" />
+            SEM JUÍZO E.C.
+          </div>
+          <div class="score">4 - 1</div>
+          <div class="team">
+            <img src="{{ url_for('static', filename='images/River são Pedro.png') }}" alt="Desce Mais Uma" class="team-photo" />
+            RIVER SÃO PEDRO
+          </div>
+        </div>
+        <div class="time-date">
+          SUB-17<br />
+          17/08<br />
+          09:30<br />
+          ARENA DE ESPORTES<br />
+        </div>
+      </div>
+
+      <div class="game">
+        <div class="teams-container">
+          <div class="team">
+           <img src="{{ url_for('static', filename='images/Sem juízo.png') }}" alt="JDCF" class="team-photo" />
+            SEM JUÍZO E.C.
+          </div>
+          <div class="score">0 - 0</div>
+          <div class="team">
+            <img src="{{ url_for('static', filename='images/u. do izaura.png') }}" alt="Villa São Pedro" class="team-photo" />
+            U. DO IZAURA
+          </div>
+        </div>
+        <div class="time-date">
+          SUB-17<br />
+          24/08<br />
+          08:30<br />
+          CPX CENTRAL<br />
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- Fim do conteúdo -->
+
+  <!-- Footer com imagem do patrocinador -->
+  <footer class="sponsor-footer">
+     
+       <img src="{{ url_for('static', filename='images/ADZ.png') }}" alt="nÃO DEU CERTO SAPORRA" class="team-phoder" />
+       
+  </footer>
+
+</body>
+</html>
